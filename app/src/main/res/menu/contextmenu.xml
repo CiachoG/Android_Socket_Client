@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.menudemo.MenuActivity" >
+    <group android:id="@+id/group1">
+        <item
+            android:id="@+id/context_menu_hotkey"
+            android:orderInCategory="300"
+            android:menuCategory="container"
+            android:title="热键"/>
+        <item
+            android:id="@+id/context_menu_read"
+            android:orderInCategory="200"
+            android:menuCategory="system"
+            android:title="本地读取文件"/>
+    </group>
+</menu>
