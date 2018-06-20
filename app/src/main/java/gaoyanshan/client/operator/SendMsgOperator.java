@@ -45,4 +45,29 @@ public class SendMsgOperator {
         ClientSocket clientSocket=new ClientSocket(mIp,mPort,handler,"key:"+set+"\n");
         clientSocket.work();
     }
+    public void mov(String set)
+    {
+        ClientSocket clientSocket=new ClientSocket(mIp,mPort,handler,"mov:"+set+"\n");
+        clientSocket.work();
+    }
+    public void clk(String set)
+    {
+        ClientSocket clientSocket=new ClientSocket(mIp,mPort,handler,"clk:"+set+"\n");
+        clientSocket.work();
+    }
+    public void dlf(String set)
+    {
+        ClientSocket clientSocket=new ClientSocket(mIp,mPort,handler,"dlf:"+set+"\n");
+        clientSocket.work();
+    }
+    public void ulf(String set)
+    {
+        ClientSocket clientSocket=new ClientSocket(mIp,mPort,handler,"ulf:"+set+"\n");
+        clientSocket.work();
+    }
+    public void del(String set)
+    {
+        ClientSocket clientSocket=new ClientSocket(mIp,mPort,handler,"del:"+set+"\n");
+        clientSocket.work();
+    }
 }

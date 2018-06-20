@@ -2,15 +2,18 @@ package gaoyanshan.client.view;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.GestureDetector;
 import android.view.View;
 import android.widget.Toast;
 
 
+import com.example.ciacho.gys_socket.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -25,11 +28,15 @@ import java.util.List;
 
 
 import gaoyanshan.client.data.FileData;
+import gaoyanshan.client.download.DownloadProgressDialog;
+import gaoyanshan.client.download.DownloadService;
+import gaoyanshan.client.operator.MousePadOnGestureListener;
 import gaoyanshan.client.operator.NavRecOperator;
 import gaoyanshan.client.operator.SendMsgOperator;
 import gaoyanshan.client.socket.ClientSocket;
 import gaoyanshan.client.adapter.FileDataAdapter;
 import gaoyanshan.client.adapter.NavAdapter;
+import gaoyanshan.client.upload.UploadProgressDialog;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -44,12 +51,19 @@ public class ShowRemoteFileHandler extends Handler {
     List<String> mRData = new ArrayList<String>();
     private NavRecOperator navRecOperator;
     private SendMsgOperator sendMsgOperator;
-    public  ShowRemoteFileHandler(Context context, RecyclerView mRecyclerView,ArrayList<FileData> netFileDataList,RecyclerView mRecyclerView2){
+    SharedPreferences sharedPreferences;
+
+    public List<String> getmRData() {
+        return mRData;
+    }
+
+    public  ShowRemoteFileHandler(Context context, RecyclerView mRecyclerView, ArrayList<FileData> netFileDataList, RecyclerView mRecyclerView2){
         this.context=context;
         this.mRecyclerView=mRecyclerView;
         this.mRecyclerView2=mRecyclerView2;
         sendMsgOperator=new SendMsgOperator(this,context);
         this.netFileDataList=netFileDataList;
+
     }
 
     @Override
@@ -57,14 +71,42 @@ public class ShowRemoteFileHandler extends Handler {
 
         switch (msg.what)
         {
-            case 0:
-                Toast.makeText(context,"文件访问出错",Toast.LENGTH_SHORT).show();
+            case 0: //错误信息
                 break;
-            case 1:
+            case 1://获取列表
+                sharedPreferences=context.getSharedPreferences("ipAndPort",MODE_PRIVATE);
                 jsonArrayBobean(msg);
                 updateRecycleView();
                 break;
-            case 2:
+            case 2://打开文件
+                break;
+            case 3://鼠标
+                break;
+            case 4://热键
+                break;
+            case 5://下载
+                String downloadInfo=msg.getData().getString(ClientSocket.KEY_SERVER_ACK_MSG);
+
+                DownloadProgressDialog downloadProgressDialog=new DownloadProgressDialog(context);
+                downloadProgressDialog.initParameter(sharedPreferences.getString("ip","192.168.1.2"),
+                        downloadInfo.split(":")[1],downloadInfo.split(":")[2],downloadInfo.split(":")[3]).starDownload();
+                downloadProgressDialog.show();
+                break;
+            case 6:
+                SharedPreferences sharedPreferences2=context.getSharedPreferences("path",MODE_PRIVATE);
+                String uploadPath="";
+                if(sharedPreferences2!=null){
+                    uploadPath=sharedPreferences2.getString("updownPath","");
+                    String uploadInfo=msg.getData().getString(ClientSocket.KEY_SERVER_ACK_MSG);
+                    UploadProgressDialog uploadProgressDialog=new UploadProgressDialog(context)
+                            .initParameter(sharedPreferences.getString("ip",""),uploadInfo.split(":")[1],uploadPath)
+                            .starUpload();
+                    uploadProgressDialog.show();
+                }
+
+                break;
+            case 7://删除返回
+                Toast.makeText(context,msg.getData().getString(ClientSocket.KEY_SERVER_ACK_MSG).split(":")[1],Toast.LENGTH_SHORT).show();
                 break;
 
         }
@@ -81,7 +123,7 @@ public class ShowRemoteFileHandler extends Handler {
         JsonArray jsonArray = jsonObject.getAsJsonArray("FileData");
         for (JsonElement jsonElement : jsonArray) {
             FileData fileData = gson.fromJson(jsonElement, new TypeToken<FileData>() {}.getType());
-            mRData= Arrays.asList(fileData.getParentPath().split("\\\\"));
+            mRData= Arrays.asList(("此电脑\\"+fileData.getParentPath()).split("\\\\"));
             netFileDataList.add(fileData);
 
         }
@@ -92,7 +134,7 @@ public class ShowRemoteFileHandler extends Handler {
     {
         LinearLayoutManager layoutManager=new LinearLayoutManager(context);
         mRecyclerView.setLayoutManager(layoutManager);
-        FileDataAdapter fileDataAdapter=new FileDataAdapter(netFileDataList);
+        final FileDataAdapter fileDataAdapter=new FileDataAdapter(netFileDataList);
         mRecyclerView.setAdapter(fileDataAdapter);
         fileDataAdapter.setOnItemClickListener(new FileDataAdapter.OnItemClickListener() {
             @Override
@@ -115,6 +157,5 @@ public class ShowRemoteFileHandler extends Handler {
             }
         });
     }
-
 }
 

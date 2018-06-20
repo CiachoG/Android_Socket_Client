@@ -9,14 +9,14 @@
             android:menuCategory="container"
             android:title="连接"/>
         <item
-            android:id="@+id/menu_readC"
+            android:id="@+id/menu_mousepad"
             android:orderInCategory="200"
             android:menuCategory="system"
-            android:title="读取C盘"/>
+            android:title="鼠标操作"/>
         <item
-            android:id="@+id/menu_readD"
+            android:id="@+id/menu_upload"
             android:orderInCategory="200"
             android:menuCategory="system"
-            android:title="读取D盘"/>
+            android:title="上传文件"/>
     </group>
 </menu>

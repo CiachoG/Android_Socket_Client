@@ -2,6 +2,8 @@ package gaoyanshan.client.data;
 
 import java.util.ArrayList;
 
+import gaoyanshan.client.app.MyActivity;
+
 /**
  * Created by Ciacho on 2018/5/4.
  */
@@ -12,7 +14,6 @@ public class PPT_HotKey {
 
         HotKeyData h1=new HotKeyData("切换程序","VK_ALT+VK_TAB");
         hotKeyDataArrayList.add(h1);
-
         HotKeyData h2=new HotKeyData("ESC","VK_ESCAPE");
         hotKeyDataArrayList.add(h2);
 
@@ -28,7 +29,7 @@ public class PPT_HotKey {
         HotKeyData h6=new HotKeyData("当前放映","VK_SHIFT+VK_F5");
         hotKeyDataArrayList.add(h6);
 
-        HotKeyData h7=new HotKeyData("退出程序","VK_SHIFT+VK_F4");
+        HotKeyData h7=new HotKeyData("退出程序","VK_ALT+VK_F4");
         hotKeyDataArrayList.add(h7);
 
         HotKeyData h8=new HotKeyData("黑屏","VK_B");

@@ -2,6 +2,7 @@ package gaoyanshan.client.adapter;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -79,8 +80,10 @@ public class FileDataAdapter extends RecyclerView.Adapter<FileDataAdapter.ViewHo
             contextMenu.setHeaderTitle("选择操作");
             contextMenu.add(Menu.NONE, R.id.context_menu_hotkey,
                     Menu.NONE, "热键操作");
-            contextMenu.add(Menu.NONE, R.id.context_menu_read,
-                    Menu.NONE, "本地读取");
+            contextMenu.add(Menu.NONE, R.id.context_menu_download,
+                    Menu.NONE, "下载");
+            contextMenu.add(Menu.NONE, R.id.context_menu_delete,
+                    Menu.NONE, "删除");
         }
 
     }
@@ -164,6 +167,8 @@ public class FileDataAdapter extends RecyclerView.Adapter<FileDataAdapter.ViewHo
                 return R.drawable.ic_mp3;
             case "mp4":
                 return R.drawable.ic_mp4;
+            case "wmv":
+                return R.drawable.ic_wmv;
             default:
                 return R.drawable.ic_file;
         }

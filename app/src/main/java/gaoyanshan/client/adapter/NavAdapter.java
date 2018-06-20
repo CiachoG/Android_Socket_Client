@@ -29,9 +29,6 @@ public class NavAdapter extends RecyclerView.Adapter<NavAdapter.ViewHolder> impl
     public interface OnItemClickListener {
         void onClick(View view, int position);
     }
-
-    ;
-
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.mOnItemClickListener = listener;
     }

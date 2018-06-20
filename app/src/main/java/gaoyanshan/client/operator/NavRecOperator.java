@@ -33,13 +33,20 @@ public class NavRecOperator {
         m_RecycleAdapter.setOnItemClickListener(new NavAdapter.OnItemClickListener() {
             @Override
             public void onClick(View view, int position) {
-                String str ="";
-                for(int i=0;i<position;i++)
+                if(position==0)
                 {
-                    str=str+mRData.get(i)+"\\";
+                    sendMsgOperator.connect();
                 }
-                str=str+mRData.get(position)+"\\";
-                sendMsgOperator.dir(str);
+                else {
+                    String str ="";
+                    for(int i=1;i<position;i++)
+                    {
+                        str=str+mRData.get(i)+"\\";
+                    }
+                    str=str+mRData.get(position)+"\\";
+                    sendMsgOperator.dir(str);
+                }
+
             }
         });
         m_RecycleAdapter.notifyDataSetChanged();

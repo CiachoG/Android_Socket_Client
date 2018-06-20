@@ -19,6 +19,8 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
+import gaoyanshan.client.jsonBean.Entity2json;
+
 /**
  * Created by Ciacho on 2018/3/9.
  */
@@ -60,12 +62,28 @@ public class ClientSocket {
         {
             message.what=0;
         }
-        else  if(msg.equals("open"))
+        else if(new Entity2json().isJson(msg)){
+            message.what=1;
+        }
+        else  if(msg.indexOf("open")!=-1)
         {
             message.what=2;
         }
-        else {
-            message.what=1;
+        else if(msg.equals("mov")){
+            message.what=3;
+        }
+        else if(msg.equals("key")){
+            message.what=4;
+        }
+        else if(msg.indexOf("dlf")!=-1){
+            message.what=5;
+        }
+        else if(msg.indexOf("ulf")!=-1){
+            message.what=6;
+        }
+        else if(msg.indexOf("del")!=-1)
+        {
+            message.what=7;
         }
         handler.sendMessage(message);//  通过句柄通知主 UI 数据传输完毕，并回传数据
     }
@@ -81,9 +99,8 @@ public class ClientSocket {
     private void connect() throws IOException {
         InetSocketAddress address = new InetSocketAddress(ip, port);
         socket = new Socket();
-
-            socket.connect(address, connect_timeout);
-            socket.setSoTimeout(8000);
+        socket.connect(address, connect_timeout);
+        socket.setSoTimeout(8000);
 
     }
     private String getMessage() {
