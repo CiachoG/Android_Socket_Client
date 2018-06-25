@@ -48,6 +48,7 @@ public class UploadTask extends AsyncTask<String, Integer, Integer> {
             socket.connect(address, 2000);
             socket.setSoTimeout(8000);
 
+            System.out.println("UploadTask:"+Thread.currentThread());
             InputStream inputStream = socket.getInputStream();
             InputStreamReader reader = new InputStreamReader(inputStream, "utf-8");
             BufferedReader bufferedReader=new BufferedReader(reader);
@@ -60,7 +61,7 @@ public class UploadTask extends AsyncTask<String, Integer, Integer> {
                 System.out.println("======== 开始传输文件 ========");
                 byte[] bytes = new byte[1024];
                 int length = 0;
-                int total=0;
+                Long total=Long.parseLong("0");//记录上传过程的长度
                 while ((length = access.read(bytes, 0, bytes.length)) != -1) {
                     dos.write(bytes, 0, length);
                     dos.flush();
@@ -70,7 +71,7 @@ public class UploadTask extends AsyncTask<String, Integer, Integer> {
                         return TYPE_PAUSED;
                     else
                         total+=length;
-                    int progress=(int)(((total)*100)/fileLength);
+                    int progress=(int)(total*100/fileLength);
                     System.out.print(progress+"   "+ fileLength+"\n");
                     publishProgress(progress);
                 }

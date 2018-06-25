@@ -70,4 +70,14 @@ public class SendMsgOperator {
         ClientSocket clientSocket=new ClientSocket(mIp,mPort,handler,"del:"+set+"\n");
         clientSocket.work();
     }
+    public void wheel(String set)
+    {
+        ClientSocket clientSocket=new ClientSocket(mIp,mPort,handler,"wheel:"+set+"\n");
+        clientSocket.work();
+    }
+    public void cmd(String set)
+    {
+        ClientSocket clientSocket=new ClientSocket(mIp,mPort,handler,"cmd:"+set+"\n");
+        clientSocket.work();
+    }
 }

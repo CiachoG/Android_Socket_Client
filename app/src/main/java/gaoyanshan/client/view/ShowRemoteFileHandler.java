@@ -2,18 +2,15 @@ package gaoyanshan.client.view;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.GestureDetector;
 import android.view.View;
 import android.widget.Toast;
 
 
-import com.example.ciacho.gys_socket.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -28,14 +25,12 @@ import java.util.List;
 
 
 import gaoyanshan.client.data.FileData;
-import gaoyanshan.client.download.DownloadProgressDialog;
-import gaoyanshan.client.download.DownloadService;
-import gaoyanshan.client.operator.MousePadOnGestureListener;
+import gaoyanshan.client.download.DownloadData;
+import gaoyanshan.client.download.DownloadDialog;
 import gaoyanshan.client.operator.NavRecOperator;
 import gaoyanshan.client.operator.SendMsgOperator;
 import gaoyanshan.client.socket.ClientSocket;
 import gaoyanshan.client.adapter.FileDataAdapter;
-import gaoyanshan.client.adapter.NavAdapter;
 import gaoyanshan.client.upload.UploadProgressDialog;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -52,7 +47,7 @@ public class ShowRemoteFileHandler extends Handler {
     private NavRecOperator navRecOperator;
     private SendMsgOperator sendMsgOperator;
     SharedPreferences sharedPreferences;
-
+    private DownloadDialog downloadDialog;
     public List<String> getmRData() {
         return mRData;
     }
@@ -63,7 +58,7 @@ public class ShowRemoteFileHandler extends Handler {
         this.mRecyclerView2=mRecyclerView2;
         sendMsgOperator=new SendMsgOperator(this,context);
         this.netFileDataList=netFileDataList;
-
+        downloadDialog=new DownloadDialog(context);
     }
 
     @Override
@@ -75,6 +70,7 @@ public class ShowRemoteFileHandler extends Handler {
                 break;
             case 1://获取列表
                 sharedPreferences=context.getSharedPreferences("ipAndPort",MODE_PRIVATE);
+
                 jsonArrayBobean(msg);
                 updateRecycleView();
                 break;
@@ -86,16 +82,16 @@ public class ShowRemoteFileHandler extends Handler {
                 break;
             case 5://下载
                 String downloadInfo=msg.getData().getString(ClientSocket.KEY_SERVER_ACK_MSG);
+                DownloadData downloadData=new DownloadData(downloadInfo.split(":")[2],downloadInfo.split(":")[3],
+                                            0,sharedPreferences.getString("ip","192.168.1.2"),downloadInfo.split(":")[1]);
 
-                DownloadProgressDialog downloadProgressDialog=new DownloadProgressDialog(context);
-                downloadProgressDialog.initParameter(sharedPreferences.getString("ip","192.168.1.2"),
-                        downloadInfo.split(":")[1],downloadInfo.split(":")[2],downloadInfo.split(":")[3]).starDownload();
-                downloadProgressDialog.show();
+                downloadDialog.show();
+                downloadDialog.startDownload(downloadData);
                 break;
             case 6:
                 SharedPreferences sharedPreferences2=context.getSharedPreferences("path",MODE_PRIVATE);
                 String uploadPath="";
-                if(sharedPreferences2!=null){
+                if(sharedPreferences2.getString("updownPath","")!=""){
                     uploadPath=sharedPreferences2.getString("updownPath","");
                     String uploadInfo=msg.getData().getString(ClientSocket.KEY_SERVER_ACK_MSG);
                     UploadProgressDialog uploadProgressDialog=new UploadProgressDialog(context)
@@ -106,7 +102,9 @@ public class ShowRemoteFileHandler extends Handler {
 
                 break;
             case 7://删除返回
-                Toast.makeText(context,msg.getData().getString(ClientSocket.KEY_SERVER_ACK_MSG).split(":")[1],Toast.LENGTH_SHORT).show();
+                String delReturnMsg=msg.getData().getString(ClientSocket.KEY_SERVER_ACK_MSG);
+                sendMsgOperator.dir(netFileDataList.get(0).getParentPath());
+                Toast.makeText(context,delReturnMsg.split(":")[1],Toast.LENGTH_SHORT).show();
                 break;
 
         }

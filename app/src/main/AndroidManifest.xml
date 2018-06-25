@@ -12,11 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="gaoyanshan.client.test.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
         <activity android:name="gaoyanshan.client.app.MyActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,12 +20,6 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name="gaoyanshan.client.download.DownloadService"
-            android:enabled="true"
-            android:exported="true" />
-
-        <activity android:name="gaoyanshan.client.download.DownloadActivity" />
         <activity android:name="gaoyanshan.client.upload.UpLoadActivity"></activity>
     </application>
 

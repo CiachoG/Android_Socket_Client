@@ -18,20 +18,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ciacho.gys_socket.R;
-
-import javax.xml.transform.Templates;
-
-import gaoyanshan.client.test.MainActivity;
 
 public class UpLoadActivity extends AppCompatActivity {
 
     private Button button;
     private TextView textView;
     private String path;
-
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +38,9 @@ public class UpLoadActivity extends AppCompatActivity {
         intent.setType("*/*");//无类型限制
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         startActivityForResult(intent, 1);
+        editor=getSharedPreferences("path",MODE_PRIVATE).edit();
+        editor.putString("updownPath","");
+        editor.apply();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,7 +68,7 @@ public class UpLoadActivity extends AppCompatActivity {
                 path = getRealPathFromURI(uri);
                 textView.setText(path);
             }
-            SharedPreferences.Editor editor=getSharedPreferences("path",MODE_PRIVATE).edit();
+
             editor.putString("updownPath",path);
             editor.apply();
 

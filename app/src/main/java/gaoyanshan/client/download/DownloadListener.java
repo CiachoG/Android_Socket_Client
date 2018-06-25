@@ -2,7 +2,7 @@ package gaoyanshan.client.download;
 
 public interface DownloadListener {
 
-    void onProgress(String filename,int progress);
+    void onProgress(int port,int progress);
 
     void onSuccess();
 

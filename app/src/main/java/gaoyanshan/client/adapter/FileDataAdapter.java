@@ -98,33 +98,36 @@ public class FileDataAdapter extends RecyclerView.Adapter<FileDataAdapter.ViewHo
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         FileData fileData=mFileDataList.get(position);
-        if(fileData.getLevel()==1)
+        if(fileData.getIsDirectory()!=3)
         {
-            holder.imageView.setImageResource(R.drawable.ic_pan);
-            holder.fileNameText.setText(fileData.getFilePath());
-            holder.fileDataText.setText(fileData.getFileModifileDate());
-        }
-        else{
-            holder.fileNameText.setText(fileData.getFilename());
-
-            if(fileData.getIsDirectory()==1)
+            if(fileData.getLevel()==1)
             {
-                if(fileData.getFilename().equals("..") || fileData.getFilename().equals("...")){
-                    holder.imageView.setImageResource(R.drawable.back);
-                    holder.fileDataText.setText("");
-                    holder.fileSizeText.setText("");
-                }
-                else
-                {
-                    holder.imageView.setImageResource(R.drawable.ic_isdir);
-                    holder.fileDataText.setText(fileData.getFileModifileDate());
-                }
-
-            }
-            else {
+                holder.imageView.setImageResource(R.drawable.ic_pan);
+                holder.fileNameText.setText(fileData.getFilePath());
                 holder.fileDataText.setText(fileData.getFileModifileDate());
-                holder.imageView.setImageResource(setImageType(fileData.getSuffix()));
-                holder.fileSizeText.setText(fileData.getFileSizeStr());
+            }
+            else{
+                holder.fileNameText.setText(fileData.getFilename());
+
+                if(fileData.getIsDirectory()==1)
+                {
+                    if(fileData.getFilename().equals("..") || fileData.getFilename().equals("...")){
+                        holder.imageView.setImageResource(R.drawable.back);
+                        holder.fileDataText.setText("");
+                        holder.fileSizeText.setText("");
+                    }
+                    else
+                    {
+                        holder.imageView.setImageResource(R.drawable.ic_isdir);
+                        holder.fileDataText.setText(fileData.getFileModifileDate());
+                    }
+
+                }
+                else {
+                    holder.fileDataText.setText(fileData.getFileModifileDate());
+                    holder.imageView.setImageResource(setImageType(fileData.getSuffix()));
+                    holder.fileSizeText.setText(fileData.getFileSizeStr());
+                }
             }
         }
         holder.itemView.setTag(position);
